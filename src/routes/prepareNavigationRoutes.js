@@ -104,6 +104,35 @@ const prepareNavigationRoutes = ({ app }) => {
       res.send({ result: navigation })
     }
   )
+
+  app.patch(
+    "/navigation-menus/:navigationMenuId",
+    auth,
+    validate({
+      params: {
+        navigationMenuId: idValidator.required(),
+      },
+      body: {
+        name: titleValidator,
+      },
+    }),
+    async (req, res) => {
+      const {
+        body: { name },
+      } = req.locals
+
+      const navigationUpdate = await NavigationMenuModel.query()
+        .update({
+          ...(name ? { name } : {}),
+        })
+        .where({
+          id: req.params.navigationMenuId,
+        })
+        .returning("*")
+
+      res.send({ result: navigationUpdate })
+    }
+  )
 }
 
 export default prepareNavigationRoutes

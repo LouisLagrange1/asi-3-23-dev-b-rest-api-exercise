@@ -6,6 +6,7 @@ import {
   limitValidator,
   orderValidator,
   pageValidator,
+  titleValidator,
 } from "../validators.js"
 import RoleModel from "../db/models/RoleModel.js"
 
@@ -50,6 +51,35 @@ const prepareRoleRoutes = ({ app }) => {
       }
 
       res.send({ result: role })
+    }
+  )
+  app.patch(
+    "/roles/:roleId",
+    auth,
+    validate({
+      params: {
+        roleId: idValidator.required(),
+      },
+      body: {
+        name: titleValidator,
+      },
+    }),
+    async (req, res) => {
+      const {
+        body: { name, permissions },
+      } = req.locals
+
+      const roleUpdate = await RoleModel.query()
+        .update({
+          ...(name ? { name } : {}),
+          ...(permissions ? { permissions } : {}),
+        })
+        .where({
+          id: req.params.roleId,
+        })
+        .returning("*")
+
+      res.send({ result: roleUpdate })
     }
   )
 }

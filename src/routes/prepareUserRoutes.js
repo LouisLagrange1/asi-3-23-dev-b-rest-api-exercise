@@ -104,6 +104,43 @@ const prepareUsersRoutes = ({ app }) => {
 
     res.send({ result: user })
   })
+
+  app.patch(
+    "/users/:userId",
+    auth,
+    validate({
+      params: {
+        userId: idValidator.required(),
+      },
+      body: {
+        email: titleValidator,
+        firstName: contentValidator,
+        lastName: contentValidator,
+        password: passwordValidator,
+      },
+    }),
+    async (req, res) => {
+      const {
+        body: { email, firstName, lastName, password },
+      } = req.locals
+      const [passwordHash, passwordSalt] = await hashPassword(password)
+
+      const userUpdate = await UserModel.query()
+        .update({
+          ...(email ? { email } : {}),
+          ...(firstName ? { firstName } : {}),
+          ...(lastName ? { lastName } : {}),
+          ...(passwordHash ? { passwordHash } : {}),
+          ...(passwordSalt ? { passwordSalt } : {}),
+        })
+        .where({
+          id: req.params.userId,
+        })
+        .returning("*")
+
+      res.send({ result: userUpdate })
+    }
+  )
 }
 
 export default prepareUsersRoutes

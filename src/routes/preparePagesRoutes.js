@@ -17,8 +17,10 @@ const preparePagesRoutes = ({ app }) => {
     auth,
     validate({
       body: {
-        name: titleValidator.required(),
-        permission: contentValidator.required(),
+        tilte: titleValidator.required(),
+        content: contentValidator.required(),
+        slug: contentValidator.required(),
+        status: contentValidator.required(),
       },
     }),
 
@@ -43,7 +45,6 @@ const preparePagesRoutes = ({ app }) => {
     }
   )
 
-  // LES GETS C4EST LES MEMEs
   app.get(
     "/pages",
     validate({
@@ -85,30 +86,6 @@ const preparePagesRoutes = ({ app }) => {
     }
   )
 
-  // app.patch("/posts/:postId", async (req, res) => {
-  //   const { title, content, published } = req.body
-  //   const post = await PostModel.query().findById(req.params.postId)
-
-  //   if (!post) {
-  //     res.status(404).send({ error: "not found" })
-
-  //     return
-  //   }
-
-  //   const updatedPost = await PostModel.query()
-  //     .update({
-  //       ...(title ? { title } : {}),
-  //       ...(content ? { content } : {}),
-  //       ...(published ? { published } : {}),
-  //     })
-  //     .where({
-  //       id: req.params.postId,
-  //     })
-  //     .returning("*")
-
-  //   res.send({ result: updatedPost })
-  // })
-
   app.delete(
     "/pages/:pageId",
     auth,
@@ -131,6 +108,40 @@ const preparePagesRoutes = ({ app }) => {
       })
 
       res.send({ result: pages })
+    }
+  )
+  app.patch(
+    "/pages/:pageId",
+    auth,
+    validate({
+      params: {
+        pageId: idValidator.required(),
+      },
+      body: {
+        tilte: titleValidator,
+        content: contentValidator,
+        slug: contentValidator,
+        status: contentValidator,
+      },
+    }),
+    async (req, res) => {
+      const {
+        body: { title, content, slug, status },
+      } = req.locals
+
+      const pageUpdate = await PageModel.query()
+        .update({
+          ...(title ? { title } : {}),
+          ...(content ? { content } : {}),
+          ...(slug ? { content } : {}),
+          ...(status ? { status } : {}),
+        })
+        .where({
+          id: req.params.pageId,
+        })
+        .returning("*")
+
+      res.send({ result: pageUpdate })
     }
   )
 }
