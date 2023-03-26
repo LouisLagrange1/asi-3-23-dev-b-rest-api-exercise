@@ -2,10 +2,9 @@ import { promisify } from "node:util"
 import config from "../config.js"
 import crypto from "node:crypto"
 
-
 const pbkdf2 = promisify(crypto.pbkdf2)
 
-const HashPassword = async (
+const hashPassword = async (
   password,
   salt = crypto.randomBytes(config.security.password.saltLen).toString("hex")
 ) => [
@@ -21,4 +20,4 @@ const HashPassword = async (
   salt,
 ]
 
-export default HashPassword
+export default hashPassword
