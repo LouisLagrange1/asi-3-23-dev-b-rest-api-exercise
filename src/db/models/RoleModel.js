@@ -1,7 +1,7 @@
 import BaseModel from "./BaseModel.js"
 
-class UserModel extends BaseModel {
-  static tableName = "users"
+class RoleModel extends BaseModel {
+  static tableName = "roles"
 
   static modifiers = {
     paginate: (query, limit, page) => {
@@ -10,4 +10,4 @@ class UserModel extends BaseModel {
   }
 }
 
-export default UserModel
+export default RoleModel

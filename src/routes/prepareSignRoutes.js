@@ -7,7 +7,6 @@ import {
   displayNameValidator,
   emailValidator,
   passwordValidator,
-  stringValidator,
 } from "../validators.js"
 
 const prepareSignRoutes = ({ app, db }) => {
@@ -68,9 +67,9 @@ const prepareSignRoutes = ({ app, db }) => {
         return
       }
 
-  const jwt = jsonwebtoken.sign(
+      const jwt = jsonwebtoken.sign(
         {
-          paylod: {
+          payload: {
             user: {
               id: user.id,
             },
@@ -79,7 +78,6 @@ const prepareSignRoutes = ({ app, db }) => {
         config.security.jwt.secret,
         config.security.jwt.options
       )
-
 
       res.send({ result: jwt })
     }

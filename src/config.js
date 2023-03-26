@@ -16,10 +16,13 @@ const config = {
       directory: resolve("src/db/migrations"),
       stub: resolve("src/db/migrations.stub"),
     },
+    seeds : {
+      directory: "./src/db/seeds",
+    }
   },
   security: {
     jwt: {
-      secret: process.SECURITY_JWT_SECRET,
+      secret: process.env.SECURITY_JWT_SECRET,
       options: {
         expiresIn: "2 days",
       },    },
