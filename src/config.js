@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { resolve } from "node:path";
+import "dotenv/config"
+import { resolve } from "node:path"
 
 const config = {
   port: 3000,
@@ -9,23 +9,24 @@ const config = {
       host: process.env.DB_CONNECTION_HOST,
       port: process.env.DB_CONNECTION_PORT,
       user: process.env.DB_CONNECTION_USER,
-      password:"Loumain92",
+      password: process.env.DB_CONNECTION_PASSWORD,
       database: process.env.DB_CONNECTION_DATABASE,
     },
     migrations: {
       directory: resolve("src/db/migrations"),
       stub: resolve("src/db/migrations.stub"),
     },
-    seeds : {
+    seeds: {
       directory: "./src/db/seeds",
-    }
+    },
   },
   security: {
     jwt: {
       secret: process.env.SECURITY_JWT_SECRET,
       options: {
         expiresIn: "2 days",
-      },    },
+      },
+    },
     password: {
       saltLen: 128,
       keylen: 128,
@@ -34,6 +35,6 @@ const config = {
       pepper: process.env.SECURITY_PASSWORD_PEPPER,
     },
   },
-};
+}
 
-export default config;
+export default config
